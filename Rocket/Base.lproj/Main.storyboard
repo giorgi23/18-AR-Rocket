@@ -21,26 +21,30 @@
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="99" translatesAutoresizingMaskIntoConstraints="NO" id="0RZ-rS-3cz">
                                 <rect key="frame" x="67.5" y="705" width="279" height="50"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x0s-ue-g57">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x0s-ue-g57" customClass="customUIButtons" customModule="Rocket" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="90" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="90" id="EAG-mq-wTJ"/>
                                             <constraint firstAttribute="height" constant="50" id="bRh-Fh-YhS"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Launch"/>
+                                        <state key="normal" title="Launch">
+                                            <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
                                         <connections>
                                             <action selector="launch:" destination="BV1-FR-VrT" eventType="touchUpInside" id="OVy-zF-tOM"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tdd-nk-lw9">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tdd-nk-lw9" customClass="customUIButtons" customModule="Rocket" customModuleProvider="target">
                                         <rect key="frame" x="189" y="0.0" width="90" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="90" id="Acj-M3-YEh"/>
                                             <constraint firstAttribute="height" constant="50" id="tv4-kM-897"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Take off"/>
+                                        <state key="normal" title="Take off">
+                                            <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
                                         <connections>
                                             <action selector="takeOff:" destination="BV1-FR-VrT" eventType="touchUpInside" id="OWw-Yj-0vb"/>
                                         </connections>

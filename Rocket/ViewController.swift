@@ -15,10 +15,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var sceneView: ARSCNView!
     
     var storedRocketArray = [SCNNode]()
+    var storedTextArray = [SCNNode]()
     var planeNodes = [SCNNode]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         // Set the view's delegate
         sceneView.delegate = self
@@ -26,7 +28,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
         
-        sceneView.debugOptions = [ARSCNDebugOptions.showWorldOrigin, ARSCNDebugOptions.showFeaturePoints]
+        //sceneView.debugOptions = [ARSCNDebugOptions.showWorldOrigin, ARSCNDebugOptions.showFeaturePoints]
         
         // Create a new scene
         //guard let scene = SCNScene(named: "art.scnassets/rocketship.scn") else {return}
@@ -87,8 +89,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-//        guard storedRocketArray.isEmpty else {
-//            return
+        if storedTextArray.isEmpty == false {
+            
+            for text in storedTextArray {
+                text.removeFromParentNode()
+            }
+        }
+        
+//Uncomment if you want one rocket at a time
+//        if storedRocketArray.isEmpty == false {
+//            for rocket in storedRocketArray {
+//                rocket.removeFromParentNode()
+//            }
 //        }
         
         guard let touch = touches.first else {return}
@@ -160,6 +172,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             thrust(rocket)
             rocket.physicsBody?.applyForce(SCNVector3(0, 3, 0), asImpulse: true)
         }
+        
+        placeText()
     }
     
     //declare particle function
@@ -172,4 +186,28 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
 
     }
+    
+    
+    func placeText() {
+        
+        let text = SCNText(string: "Happy 4.07", extrusionDepth: 1.0)
+        text.firstMaterial?.diffuse.contents = UIColor.blue
+        text.firstMaterial?.isDoubleSided = true
+        text.flatness = 0
+        
+        let textNode = SCNNode(geometry: text)
+        textNode.position = SCNVector3(-2, 0, -7)
+        textNode.geometry = text
+        textNode.scale = SCNVector3(0.1, 0.1, 0.1)
+        
+        textNode.opacity = 0
+        let fadeAction = SCNAction.fadeIn(duration: 3)
+        fadeAction.timingMode = .easeInEaseOut
+        
+        textNode.runAction(fadeAction)
+        
+        storedTextArray.append(textNode)
+        sceneView.scene.rootNode.addChildNode(textNode)
+    }
+    
 }
