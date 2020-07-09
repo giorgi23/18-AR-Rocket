@@ -14,6 +14,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     
+    var storedSound = SCNAudioSource()
+    var storedSoundtk = SCNAudioSource()
+    
     var storedRocketArray = [SCNNode]()
     var storedTextArray = [SCNNode]()
     var planeNodes = [SCNNode]()
@@ -40,6 +43,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         sceneView.automaticallyUpdatesLighting = true
         sceneView.autoenablesDefaultLighting = true
+        
+        storedSound = SCNAudioSource(fileNamed: "art.scnassets/launch.mp3")!
+        storedSound.load()
+        storedSoundtk = SCNAudioSource(fileNamed: "art.scnassets/tk.mp3")!
+        storedSoundtk.load()
         
     }
     
@@ -153,6 +161,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @IBAction func launch(_ sender: UIButton) {
+        
         //TODO: call particle function
         
         let upAction = SCNAction.move(by: SCNVector3(0, 0.3, 0), duration: 3)
@@ -161,6 +170,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         for rocket in storedRocketArray {
             thrust(rocket)
             rocket.runAction(upAction)
+            let musicAction = SCNAction.playAudio(storedSound, waitForCompletion: false)
+            rocket.runAction(musicAction)
         }
     }
     
@@ -171,6 +182,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         for rocket in storedRocketArray {
             thrust(rocket)
             rocket.physicsBody?.applyForce(SCNVector3(0, 3, 0), asImpulse: true)
+            let musicAction = SCNAction.playAudio(storedSoundtk, waitForCompletion: false)
+            rocket.runAction(musicAction)
         }
         
         placeText()
@@ -190,24 +203,40 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     func placeText() {
         
-        let text = SCNText(string: "Happy 4.07", extrusionDepth: 1.0)
-        text.firstMaterial?.diffuse.contents = UIColor.blue
-        text.firstMaterial?.isDoubleSided = true
-        text.flatness = 0
-        
-        let textNode = SCNNode(geometry: text)
-        textNode.position = SCNVector3(-2, 0, -7)
-        textNode.geometry = text
-        textNode.scale = SCNVector3(0.1, 0.1, 0.1)
-        
-        textNode.opacity = 0
-        let fadeAction = SCNAction.fadeIn(duration: 3)
-        fadeAction.timingMode = .easeInEaseOut
-        
-        textNode.runAction(fadeAction)
-        
-        storedTextArray.append(textNode)
-        sceneView.scene.rootNode.addChildNode(textNode)
+        if let camera = sceneView.session.currentFrame?.camera {
+            let cameraLocation = SCNVector3(camera.transform.columns.3.x, camera.transform.columns.3.y, camera.transform.columns.3.z)
+            let cameraOrientation = SCNVector3(-camera.transform.columns.2.x, -camera.transform.columns.2.y, -camera.transform.columns.2.z)
+            let cameraPosition = SCNVector3Make(cameraLocation.x + cameraOrientation.x, cameraLocation.y + cameraOrientation.y, cameraLocation.z + cameraOrientation.z)
+            
+            let textToAdd = "Happy 4.07!"
+            var title = ""
+            var charIndex = 0.0
+            for letter in textToAdd {
+                Timer.scheduledTimer(withTimeInterval: 0.1 * charIndex, repeats: false) { (Timer) in
+                    title.append(String(letter))
+                    print(title)
+                    let text = SCNText(string: title, extrusionDepth: 1.0)
+                    text.firstMaterial?.diffuse.contents = UIColor.red
+                    text.firstMaterial?.isDoubleSided = true
+                    text.flatness = 0
+                    
+                    let textNode = SCNNode(geometry: text)
+                    textNode.position = SCNVector3(cameraPosition.x - 3, cameraPosition.y + 0.5, cameraPosition.z - 7)
+                    textNode.geometry = text
+                    textNode.scale = SCNVector3(0.1, 0.1, 0.1)
+                    textNode.opacity = 1
+                    
+                    //        let fadeAction = SCNAction.fadeIn(duration: 3)
+                    //        fadeAction.timingMode = .easeInEaseOut
+                    //        textNode.runAction(fadeAction)
+                    
+                    self.storedTextArray.append(textNode)
+                    self.sceneView.scene.rootNode.addChildNode(textNode)
+                }
+
+                charIndex += 2
+            }
+        }
     }
     
 }
